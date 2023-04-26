@@ -1,3 +1,5 @@
+@import '~vue-awesome-notifications/dist/styles/style.css';
+
 .header-wrapper{
     background: rgb(32,27,121);
     background: linear-gradient(326deg, rgba(32,27,121,1) 0%, rgba(11,57,205,1) 100%, rgba(0,212,255,1) 100%);
@@ -47,9 +49,7 @@
 .submenus-active *{
     color: #000 !important;
  }
- .v-main__wrap{
-    background-color: #f0f0f0;
- }
+
  #table{
     border: solid 1px #ede9e9;
  }
@@ -70,4 +70,30 @@
 }
 .v-card{
     width: 100%;
+}
+
+.header-wrapper-info{
+  display: flex;
+  align-items: center;
+}
+.v-messages__message{
+  color: red;
+}
+#infor-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+}
+.personal-wrapper{
+    max-height: 700px;
+    overflow: auto;
+}
+.text-base{
+    text-transform: uppercase;
+    color: #323232;
+}
+
+body *{
+    font-family: none;
 }

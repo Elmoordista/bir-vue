@@ -18,8 +18,8 @@
           size="64"
         ></v-avatar>
 
-        <div class="text-white">JUAN DELA CRUZ</div>
-        <small class="text-white">ADMINSTRATOR</small>
+        <div class="text-white">JHON DOE</div>
+        <small class="text-white">EMPLOYEE</small>
       </div>
 
       <div class="drawer-wrapper">
@@ -95,7 +95,7 @@ import FooterLayout from './components/footer.vue'
        
         {
           text: "Personal Profile",
-          route: "serves",
+          route: "profile",
           icon : 'mdi-account-settings',
           submenus:[
               {
@@ -166,7 +166,7 @@ import FooterLayout from './components/footer.vue'
     }),
     methods:{
       goTO(route){
-        this.$router.push(route)
+        this.$router.push({name:route})
       }
     }
   }

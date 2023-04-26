@@ -46,7 +46,6 @@
                         <label class="text-lg text-black">From</label>
                         <v-menu
                             ref="menu_from"
-                            v-model="menu"
                             :close-on-content-click="true"
                             :return-value.sync="payload.from"
                             transition="scale-transition"

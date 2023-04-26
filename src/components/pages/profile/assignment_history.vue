@@ -8,7 +8,7 @@
                     color="primary"
                     rounded
                     elevation="2"
-                    @click="showeducationmodal = true"
+                    @click="showAssignmentModal = true"
                     >
                     Add
                 </v-btn>
@@ -29,6 +29,7 @@
                 <v-data-table
                     :headers="header"
                     :items="desserts"
+                    :search="search"
                     :items-per-page="6"
                 >
                 <template v-slot:item.action="{ item }">
@@ -41,22 +42,23 @@
                 </v-data-table>
             </div>
         </v-card>
-        <learning-development @closedialog="closedialog" :showdialog="showeducationmodal"></learning-development>
-        <education-modal @closedialog="closedialog" :showdialog="showeducationmodal"></education-modal>
-        <eligibility-modal @closedialog="closedialog" :showdialog="showeligibilitymodal"></eligibility-modal>
+        <assignment-development @closedialog="closedialog" :showdialog="showAssignmentModal" @saveData="saveData"></assignment-development>
+        <!-- <education-modal @closedialog="closedialog" :showdialog="showAssignmentModal"></education-modal>
+        <eligibility-modal @closedialog="closedialog" :showdialog="showeligibilitymodal"></eligibility-modal> -->
     </div>
 </template>
 
 <script>
-  import LearningDevelopment from  '@/components/modals/learning_dev.vue';
+  import AssignmentDevelopment from  '@/components/modals/assignment.vue';
+  import VueCookies from "vue-cookies";
   export default {
     components:{
-        LearningDevelopment,
+        AssignmentDevelopment,
     },
     data () {
       return {
         search:null,
-        showeducationmodal:false,
+        showAssignmentModal:false,
         showeligibilitymodal:false,
         header: [
           {
@@ -154,12 +156,47 @@
             iron: 6,
           },
         ],
+        userInfo:[],
       }
     },
+    created(){
+        this.initialized();
+       
+    },
+    mounted(){
+      this.getAssignment();
+    },
     methods:{
+        async initialized(){
+            this.userInfo = VueCookies.get("user");
+        },
         closedialog(){
-            this.showeducationmodal = false;
-            this.showeligibilitymodal = false;
+            this.showAssignmentModal = false;
+        },
+        saveData(data){
+            var thiss = this;
+            data.EmployeeID = this.userInfo.employee_id;
+            this.axios.post("/v1/employee/assignments", data)
+            .then(function (response) {
+              thiss.showAssignmentModal = false;
+              thiss.$awn.success('Save record successfully')
+            },this)
+            .catch(function (error) {
+                Object.values(error.response.data.errors).forEach(element => {
+                    thiss.$awn.warning(element[0])
+                });
+            });
+        },
+        getAssignment(){
+            this.axios.get("/v1/employee/assignments/"+this.userInfo.employee_id)
+            .then(function (response) {
+                console.log(response,'getAssignment');
+            },this)
+            .catch(function (error) {
+                Object.values(error.response.data.errors).forEach(element => {
+                    thiss.$awn.warning(element[0])
+                });
+            });
         }
     }
   }

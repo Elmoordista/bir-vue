@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import main from '../App.vue'
 import accounts from './dashboard'
 import profile from './profile'
-
+import login from '../components/pages/auth/login.vue';
+import VueCookies from "vue-cookies";
 
 Vue.use(VueRouter)
 
@@ -16,39 +17,37 @@ const router = new VueRouter({
         base: '/',
         mode: 'history',
         routes: [{
-                path: '',
+                path: '/',
                 name: 'main',
                 component: main,
-                // meta: {
-                //     requiresAuth: false
-                // },
+                meta: {
+                    requiresAuth: true
+                },
                 children: routess
             },
-            // {
-            //     path: '/login',
-            //     name: 'login',
-            //     component: login,
-            //     meta: {
-            //         requiresAuth: false
-            //     },
-            // }
+            {
+                path: '/login',
+                name: 'login',
+                component: login,
+                meta: {
+                    requiresAuth: false
+                },
+            }
         ]
     })
 
-// router.beforeEach((to, from, next) => {
-//     const requiresAuth = to.matched.some((route) => route.meta.requiresAuth)
-//     const isAuthenticated = localStorage.getItem('token')
-//     if (!requiresAuth && isAuthenticated) {
-//         next(from);
-//     } else if (requiresAuth && !isAuthenticated) {
-//         next('/login');
-//     } else {
-//         next();
-//     }
-
-//     // next();
-// });
-// /* 
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some((route) => route.meta.requiresAuth)
+    const isAuthenticated = VueCookies.get('token')
+    if (!requiresAuth && isAuthenticated) {
+        next(from);
+    } else if (requiresAuth && !isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
+    // next();
+});
 // router.beforeEach((to, from, next) => {
 //     if (to.matched.some(record => record.meta.requiresAuth)) {
 //       if (!store.getters.authenticated) {
